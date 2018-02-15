@@ -109,11 +109,16 @@ def save_checkpoint(state, args, is_best, filename='checkpoint.pth.tar'):
 
 
 # refer to https://github.com/kuangliu/pytorch-cifar/blob/master/utils.py
-_, term_width = os.popen('stty size', 'r').read().split()
-term_width = int(term_width)-1
+try:
+    _, term_width = os.popen('stty size', 'r').read().split()
+except ValueError as e:
+    term_width = 100
+
+term_width = int(term_width) - 1
 TOTAL_BAR_LENGTH = 36.
 last_time = time.time()
 begin_time = last_time
+
 
 def progress_bar(current, total, msg=None):
     """Progress Bar for display
