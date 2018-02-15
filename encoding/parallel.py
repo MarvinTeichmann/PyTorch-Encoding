@@ -223,19 +223,11 @@ class SelfDataParallel(Module):
 
     def forward(self, *inputs, **kwargs):
         inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
-        if self.training:
-            # self parallel mode
-            outputs = self.module(inputs)
-            return outputs
-        else:
-            # TODO check faster?
-            if len(self.device_ids) == 1:
-                return self.module(*inputs[0], **kwargs[0])
-            replicas = self.replicate(self.module, \
-                self.device_ids[:len(inputs)])
-            outputs = self.parallel_apply(replicas, inputs, kwargs)
-            return outputs 
-            
+
+        # self parallel mode
+        outputs = self.module(inputs, **kwargs[0])
+        return outputs
+
     def replicate(self, module, device_ids):
         return replicate(module, device_ids)
 
