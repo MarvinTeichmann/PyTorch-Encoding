@@ -10,3 +10,4 @@ encoding/lib/
 encoding/_ext/
 encoding.egg-info/
 experiments/segmentation/
+.eggs/
